@@ -245,10 +245,20 @@ const txHash = cardano.transactionSubmit(signed);
 console.log(txHash);
 ```
 
+16. Run the minting script, then wait a few moments to check the balance (utxo)
 
-16. check the balance (utxo)
+```bash
+cd ..
+node src/mint-asset.js
+```
+```bash
+node src/get-balance.js
+```
+
+
 
 17. send your nft back to your wallet
+    - Create anew script to send nft to wallet
 
 ```js
 const cardano = require("./cardano");
