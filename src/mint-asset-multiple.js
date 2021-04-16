@@ -27,6 +27,17 @@ const ASSET_ID_2 = POLICY_ID + "." + ASSET_NAME_2
 
 // 6. Define metadata
 
+/**
+ * Do you want to start with zero (PIADA0) or one (PIADA1)
+ */
+const START_WITH_ZERO = true
+
+/**
+ * Do you want to reuse the same policy id?
+ */
+const ONE_TIME_MINT = true
+
+
 const metadata = {
     721: {
         [POLICY_ID]: {
