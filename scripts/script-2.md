@@ -1,7 +1,6 @@
 # Intro Script..
 
-### Brief introduction.. tell the audience a welcoming greeting like "welcome to another ADA-Pi youtube tutorial", tell them your name and how to contact you (website or join discord). Let them know to like, suscribe, and hit that notification
-bell so they can be reminded whenever we release more tutorials for stake pool operation and developing on Cardano. 
+### Brief introduction.. tell the audience a welcoming greeting like "welcome to another ADA-Pi youtube tutorial", tell them your name and how to contact you (website or join discord). Let them know to like, suscribe, and hit that notification bell so they can be reminded whenever we release more tutorials for stake pool operation and developing on Cardano. 
 
 ### This is the second tutorial in our NFT series done by us here at ADA-Pi. Give them a brief intro into the topic "making a NFT collection on Cardano"
 
