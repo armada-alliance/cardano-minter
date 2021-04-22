@@ -15,6 +15,7 @@
     "dotenv": "^8.2.0",
     "form-data": "^4.0.0",
     "lodash": "^4.17.21",
+    "promise-parallel-throttle": "^3.3.0",
     "sharp": "^0.28.1"
   }
 }

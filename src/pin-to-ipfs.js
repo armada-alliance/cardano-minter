@@ -1,3 +1,4 @@
+/** careful! exec `node src/<filename>.js` from the project directory for the .env file to be picked up */
 const dotenv = require("dotenv")
 dotenv.config()
 const axios = require('axios')
@@ -12,7 +13,7 @@ const pinata = axios.create({
     }
 })
 
-module.exports = async (filePath) => {
+module.exports = async (name, filePath) => {
 
     //we gather a local file for this example, but any valid readStream source will work here.
     let data = new FormData();
@@ -21,10 +22,7 @@ module.exports = async (filePath) => {
     //You'll need to make sure that the metadata is in the form of a JSON object that's been convered to a string
     //metadata is optional
     const metadata = JSON.stringify({
-        name: 'PIADA0',
-        keyvalues: {
-            PI: 'ADA'
-        }
+        name,
     });
 
     data.append('pinataMetadata', metadata);
@@ -55,8 +53,19 @@ module.exports = async (filePath) => {
                 'Content-Type': `multipart/form-data; boundary=${data._boundary}`,
             }
         }).catch(e => {
-            console.log(e.response.error)
+
+            if (e.response) {
+                console.log(e.response.error)
+            } else {
+                console.log(e.message)
+            }
         })
 
-    return `ipfs://${response.data.IpfsHash}`
+    const hash = response.data.IpfsHash
+
+    return {
+        hash,
+        ipfsLink: `ipfs://${hash}`,
+        httpLink: `https://ipfs.io/ipfs/${hash}`,
+    }
 }
