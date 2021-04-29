@@ -2,8 +2,6 @@
 
 Youtube Video: https://www.youtube.com/watch?v=OeOliguGn7Y
 
-Donate to our cause here: https://cointr.ee/adapiorg 🙏❤️
-
 ## Who is this guide for?
 
 - For people who want to make NFT's
