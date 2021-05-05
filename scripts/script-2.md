@@ -1,53 +1,52 @@
-# Intro Script..
+# How to make a NFT collection on Cardano using javascript.
 
-#### Brief introduction.. tell the audience a welcoming greeting like "welcome to another ADA-Pi youtube tutorial", tell them your name and how to contact you (website or join discord). Let them know to like, suscribe, and hit that notification bell so they can be reminded whenever we release more tutorials for stake pool operation and developing on Cardano. 
+## Prerequisites
+- cardano-node / cardano-cli set up on local machine (https://docs.cardano.org/projects/cardano-node/en/latest)
+- Node.js installed version 14
+- cardano-cli-js package installed 
+- cardano-minter repo from the previous tutorial
 
-#### This is the second tutorial in our NFT series done by us here at ADA-Pi. Give them a brief intro into the topic "making a NFT collection on Cardano"
+**If you haven't already, watch the previous video tutorial here:**
+https://youtu.be/OeOliguGn7Y
 
-#### Let them know this is not meant for "beginners" but almost anyone with a bit of coding/programming knowledge and can run a cardano node and use the cli can reproduce. And if they have not yet watched our first video we recommend to watch that and complete the gitbook tutorial. (I will put link for our first video in somewhere in the top right corner of this video). You can even say we assume you have completed the "basic env setup and downloaded/install needed packages" if you want. I mean we should not really go over the initial set up very much just the cloning of the repo with the new code.
-
-
-
-## prerequisites
-all of this can be done on testnet,
-make sure to check out our tutorial
-
-## optionally watch the previous video
-
-## git clone if you havent
+## Clone the cardano-minter repo if you haven't already...
+```bash
 git clone https://github.com/ADA-Pi/cardano-minter
 cd cardano-minter
-
-## install additional dependencies
+```
+## Install additional dependencies
+```bash
 npm install form-data dotenv axios lodash sharp promise-parallel-throttle --save
+```
+# Tutorial Overview
 
-## download random images for testing
-`node src/download-test-images.js`
-define the amount of images you want to download
-iterate, download, save
+## 1. Create our initial assets
+- Create a script that will generate our assets in a nicely formatted json file called "assets.json".
+```bash
+node src/create-initial-assets-json.js
+```
+## 2. Download random images for testing
+```bash
+node src/download-test-images.js
+```
 
-## pinata.cloud
-Brief explaination why we didnt use blockfrost
-go to pinata.cloud website
-create an account
-create api keys
+## 3. Create our pinata.cloud account to get our API keys
 
-## store api keys
-create .env file
+1. Create an account
+2. Create api keys
 
-## generate assets.json
-`node src/generate-initial-assets-json.js`
-create a script that will generate a assets.json
+## 4. Need to safely store our API keys
+- create .env file and paste in our keys
 
-## or go ahead and define one yourself
-- all metadata for the asset with the image src on local file system
 
-## extend metadata.json with thumbnails
-`node src/generate-thumbnails.js`
-generate thumbnails based on images from the metadata.json
-give them same name with `_thumbnail`
+## 5. Extend metadata.json with thumbnails (optional)
+- generate thumbnails based on images from the metadata.json and
+give them same name with `_thumbnail` tag added to the name
+```bash
+node src/generate-thumbnails.js
+```
 
-## upload data to ipfs
+## 6. upload and pin our data to ipfs
 `node src/pin-images-to-ipfs.js`
 create pin-to-ipfs.js
 iterate over each item in metadata.json and:
@@ -58,25 +57,38 @@ iterate over each item in metadata.json and:
 
 ## Before you mint transaction
 
-- Speak about the various minting policies. https://docs.cardano.org/projects/cardano-node/en/latest/reference/simple-scripts.html#Step-1---construct-the-tx-body Let them know the difference in your NFTs if you use a time-locked policy vs open policy like we used in prev video. 
-Time-Lock- this ensures your NFT remains a NFT, but can't do anything once the slot has passed..Maybe explain the downside of this policy (for example you dont give your self enough time to mint/burn tokens so if there was an issue you can't do anything about it once the time has passed).
-Explain how to time lock a policy in your tutorial (before slot), and advise to publish both the policy id and script in a place easily found by users for example in your github repo or website like how spacebudz did it ( you can just show them spacebudz github and then the site to show what we mean).
+- Speak about the various minting policies. https://docs.cardano.org/projects/cardano-node/en/latest/reference/simple-scripts.html#Step-1---construct-the-tx-body 
 
+## 7. Create an "open" or "unlocked" minting policy and script
+- We will create a open minting policy script and export it in a JSON and TXT format.
+```bash
+node src/create-mint-policy.js
+```
 
-## mint transaction
-`node src/mint-multiple-assets.js`
-- build mint transaction with metadata.json
-- calc fee ( let them know they have to do this everytime and it may vary on price depending on a few factors)
-- rebuild
-- sign
-- submit
+## 8. Create an "time-locked" minting policy and script
+- Create a "time-locked" minting policy script and export it in a JSON and TXT format.
+```bash
+node src/create-time-locked-mint-policy.js
+```
 
-## send assets back to wallet
-`node src/send-multiple-assets-back-to-wallet.js`
+## 9. Create a a script to get our policy ID
+- We want to make a script that can get our Policy ID to be used in other parts of our program
+```bash
+node src/get-policy-id.js
+```
 
+## 9. Define the mint transaction 
+1. build mint transaction with metadata.json
+2. calc fee
+3. rebuild
+4. sign
+5. submit
+```bash
+node src/mint-multiple-assets.js
+```
 
-# Outro Script...
-
-### Tell them thanks for watching, and if they like the tutorials to please Delegate to our Pools {BERRY, PIADA, SBLYR} links will be in description
-### If you would like to find out more about this project and speak with us please contact us.. (Links in description and will be in the about section.
-### Stay tuned for the next video 
+## 10. Send assets back to wallet
+-Make a script to send multiple assets back to a wallet in a single transaction.
+```bash
+node src/send-multiple-assets-back-to-wallet.js
+```
