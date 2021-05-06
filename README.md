@@ -70,8 +70,8 @@ v14.16.0
 #make sure our db is in our $PATH
 CARDANO_NODE_SOCKET_PATH="$NODE_HOME/db/socket"
 
-mkdir minter
-cd minter
+mkdir cardano-minter
+cd cardano-minter
 npm init -y #creates package.json)
 npm install cardanocli-js --save
 
@@ -137,7 +137,7 @@ createWallet("ADAPI");
 ```
 
 ```bash
-cd minter
+cd cardano-minter
 node src/create-wallet.js
 ```
 
@@ -146,7 +146,7 @@ node src/create-wallet.js
 
 ```bash
 # open text editor
-cd minter/src; nano get-balance.js
+cd cardano-minter/src; nano get-balance.js
 ```
 
 ```js
