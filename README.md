@@ -64,7 +64,7 @@ v14.16.0
 
 1. verify env
 
-2. create project and inital setup
+2. create project and initial setup
 
 ```bash
 #make sure our db is in our $PATH
@@ -84,7 +84,7 @@ npm install cardanocli-js --save
 4. Download Genesis config file needed for shelly-era
 
 ```bash
-sudo nano fetch-config.sh
+nano fetch-config.sh
 ```
 
 ```
@@ -93,15 +93,15 @@ wget -N https://hydra.iohk.io/build/${NODE_BUILD_NUM}/download/1/mainnet-shelley
 ```
 
 ```bash
-sudo chmod +x fetch-config.sh
+chmod +x fetch-config.sh
 ./fetch-config.sh
 ```
 
-5. make src folder/directory and then create cardano client
+5. make src folder/directory and then create Cardano client
 
 ```bash
 mkdir src; cd src
-sudo nano cardano.js
+nano cardano.js
 ```
 
 ```js
@@ -119,7 +119,7 @@ module.exports = cardano;
 8. create wallet
 
 ```
-sudo nano create-wallet.js
+nano create-wallet.js
 ```
 
 ```js
@@ -146,7 +146,7 @@ node src/create-wallet.js
 
 ```bash
 # open text editor
-cd minter/src; sudo nano get-balance.js
+cd minter/src; nano get-balance.js
 ```
 
 ```js
