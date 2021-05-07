@@ -226,7 +226,7 @@ const metadata = {
   721: {
     [POLICY_ID]: {
       [ASSET_NAME]: {
-        name: ASSET_NAME,
+        name: "token name",
         image: "ipfs://QmQqzMTavQgT4f4T5v6PWBp7XNKtoPmC9jvn12WPT3gkSE",
         description: "Super Fancy Berry Space Green NFT",
         type: "image/png",
