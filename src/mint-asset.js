@@ -52,7 +52,7 @@ const tx = {
         }
     ],
     mint: {
-        actions: [{ type: "mint", value: 1, asset: ASSET_ID }],
+        actions: [{ type: "mint", quantity: 1, asset: ASSET_ID }],
         script: [mintScript]
     },
     metadata,
