@@ -48,10 +48,13 @@ const tx = {
     txOut: [
         {
             address: wallet.paymentAddr,
-            amount: { ...wallet.balance().amount, [ASSET_ID]: 1 }
+            value: { ...wallet.balance().value, [ASSET_ID]: 1 }
         }
     ],
-    mint: [{ action: "mint", amount: 1, token: ASSET_ID }],
+    mint: {
+        actions: [{ type: "mint", value: 1, asset: ASSET_ID }],
+        script: [mintScript]
+    },
     metadata,
     witnessCount: 2
 }
@@ -66,7 +69,7 @@ const buildTransaction = (tx) => {
         txBody: raw
     })
 
-    tx.txOut[0].amount.lovelace -= fee
+    tx.txOut[0].value.lovelace -= fee
 
     return cardano.transactionBuildRaw({ ...tx, fee })
 }
@@ -75,16 +78,15 @@ const raw = buildTransaction(tx)
 
 // 9. Sign transaction
 
-const signTransaction = (wallet, tx, script) => {
+const signTransaction = (wallet, tx) => {
 
     return cardano.transactionSign({
         signingKeys: [wallet.payment.skey, wallet.payment.skey],
-        scriptFile: script,
         txBody: tx
     })
 }
 
-const signed = signTransaction(wallet, raw, mintScript)
+const signed = signTransaction(wallet, raw)
 
 // 10. Submit transaction
 

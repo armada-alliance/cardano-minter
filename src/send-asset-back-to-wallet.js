@@ -8,7 +8,7 @@ const sender = cardano.wallet("ADAPI")
 
 console.log(
     "Balance of Sender wallet: " +
-    cardano.toAda(sender.balance().amount.lovelace) + " ADA"
+    cardano.toAda(sender.balance().value.lovelace) + " ADA"
 )
 
 const receiver = "addr1qym6pxg9q4ussr96c9e6xjdf2ajjdmwyjknwculadjya488pqap23lgmrz38glvuz8qlzdxyarygwgu3knznwhnrq92q0t2dv0"
@@ -18,13 +18,13 @@ const txInfo = {
     txOut: [
         {
             address: sender.paymentAddr,
-            amount: {
-                lovelace: sender.balance().amount.lovelace - cardano.toLovelace(1.5)
+            value: {
+                lovelace: sender.balance().value.lovelace - cardano.toLovelace(1.5)
             }
         },
         {
             address: receiver,
-            amount: {
+            value: {
                 lovelace: cardano.toLovelace(1.5),
                 "ad9c09fa0a62ee42fb9555ef7d7d58e782fa74687a23b62caf3a8025.BerrySpaceGreen": 1
             }
@@ -46,7 +46,7 @@ const fee = cardano.transactionCalculateMinFee({
 
 // 5. pay the fee by subtracting it from the sender utxo
 
-txInfo.txOut[0].amount.lovelace -= fee
+txInfo.txOut[0].value.lovelace -= fee
 
 // 6. build the final transaction
 
