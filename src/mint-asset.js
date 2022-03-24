@@ -19,9 +19,14 @@ const POLICY_ID = cardano.transactionPolicyid(mintScript)
 
 const ASSET_NAME = "BerrySpaceGreen"
 
+// Convert Asset ASCII name to HEX
+
+const ASSET_NAME_HEX = ASSET_NAME.split("").map(c => c.charCodeAt(0).toString(16).padStart(2, "0")).join("");
+
+
 // 5. Create ASSET_ID
 
-const ASSET_ID = POLICY_ID + "." + ASSET_NAME
+const ASSET_ID = POLICY_ID + "." + ASSET_NAME_HEX
 
 // 6. Define metadata
 
@@ -51,12 +56,18 @@ const tx = {
             value: { ...wallet.balance().value, [ASSET_ID]: 1 }
         }
     ],
-    mint: {
-        actions: [{ type: "mint", quantity: 1, asset: ASSET_ID }],
-        script: [mintScript]
-    },
+    mint: [
+        { action: "mint", quantity: 1, asset: ASSET_ID, script: mintScript },
+      ],
     metadata,
     witnessCount: 2
+}
+
+
+
+if(Object.keys(tx.txOut[0].value).includes("undefined")|| Object.keys(tx.txIn[0].value.includes("undefinded"))){
+    delete tx.txOut[0].value.undefined
+    delete tx.txIn[0].value.undefined
 }
 
 // 8. Build transaction
@@ -74,6 +85,7 @@ const buildTransaction = (tx) => {
     return cardano.transactionBuildRaw({ ...tx, fee })
 }
 
+console.log(tx)
 const raw = buildTransaction(tx)
 
 // 9. Sign transaction
@@ -81,7 +93,7 @@ const raw = buildTransaction(tx)
 const signTransaction = (wallet, tx) => {
 
     return cardano.transactionSign({
-        signingKeys: [wallet.payment.skey, wallet.payment.skey],
+        signingKeys: [wallet.payment.skey, wallet.payment.skey ],
         txBody: tx
     })
 }
