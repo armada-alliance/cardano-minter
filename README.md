@@ -33,7 +33,7 @@ cardano-cli version
 output should be similar:
 
 ```
-cardano-cli 1.26.1 - linux-aarch64 - ghc-8.10
+cardano-cli 1.34.1 - linux-aarch64 - ghc-8.10
 git rev 0000000000000000000000000000000000000000
 ```
 
@@ -46,7 +46,7 @@ cardano-node version
 output should be similar:
 
 ```
-cardano-node 1.26.1 - linux-aarch64 - ghc-8.10
+cardano-node 1.34.1 - linux-aarch64 - ghc-8.10
 git rev 0000000000000000000000000000000000000000
 ```
 
@@ -57,7 +57,7 @@ node -v
 ```
 
 ```
-v14.16.0
+v14.19.0
 ```
 
 ## Overview of this tutorial
@@ -88,8 +88,8 @@ nano fetch-config.sh
 ```
 
 ```
-NODE_BUILD_NUM=5822084
-wget -N https://hydra.iohk.io/build/${NODE_BUILD_NUM}/download/1/mainnet-shelley-genesis.json
+echo export NODE_BUILD_NUM=$(curl https://hydra.iohk.io/job/Cardano/iohk-nix/cardano-deployment/latest-finished/download/1/index.html | grep -e "build" | sed 's/.*build\/\([0-9]*\)\/download.*/\1/g') >> $HOME/.bashrc
+wget -N https://hydra.iohk.io/build/${NODE_BUILD_NUM}/download/1/testnet-shelley-genesis.json
 ```
 
 ```bash
@@ -105,15 +105,25 @@ nano cardano.js
 ```
 
 ```js
-const Cardano = require("cardanocli-js");
+const CardanocliJs = require("cardanocli-js");
+const os = require("os");
+const path = require("path");
 
-const cardano = new Cardano({
-  network: "mainnet",
-  dir: __dirname + "/../",
-  shelleyGenesisPath: __dirname + "/../mainnet-shelley-genesis.json",
+const dir = path.join(os.homedir(), "cardano-minter");
+const shelleyPath = path.join(
+  os.homedir(),
+  "pi-pool/files",
+  "testnet-shelley-genesis.json"
+);
+
+const cardanocliJs = new CardanocliJs({
+//   era: "mary",
+  network: 'testnet-magic 1097911063',
+  dir,
+  shelleyGenesisPath: shelleyPath,
 });
 
-module.exports = cardano;
+module.exports = cardanocliJs
 ```
 
 8. create wallet
@@ -179,81 +189,113 @@ node src/get-balance.js
 15. create mint transaction
 
 ```js
-const fs = require("fs");
-const cardano = require("./cardano");
+const cardano = require("./cardano")
 
 // 1. Get the wallet
+
+const wallet = cardano.wallet("ADAPI")
+
 // 2. Define mint script
-// 3. Create POLICY_ID
-// 4. Define ASSET_NAME
-// 5. Create ASSET_ID
-// 6. Define metadata
-// 7. Define transaction
-// 8. Build transaction
-// 9. Sign transaction
-// 10. Submit transaction
-
-const buildTransaction = (tx) => {
-  const raw = cardano.transactionBuildRaw(tx);
-  const fee = cardano.transactionCalculateMinFee({
-    ...tx,
-    txBody: raw,
-  });
-  tx.txOut[0].amount.lovelace -= fee;
-  return cardano.transactionBuildRaw({ ...tx, fee });
-};
-
-const signTransaction = (wallet, tx, script) => {
-  return cardano.transactionSign({
-    signingKeys: [wallet.payment.skey, wallet.payment.skey],
-    scriptFile: script,
-    txBody: tx,
-  });
-};
-
-const wallet = cardano.wallet("ADAPI");
 
 const mintScript = {
-  keyHash: cardano.addressKeyHash(wallet.name),
-  type: "sig",
-};
+    keyHash: cardano.addressKeyHash(wallet.name),
+    type: "sig"
+}
 
-const POLICY_ID = cardano.transactionPolicyid(mintScript);
-const ASSET_NAME = "BerrySpaceGreen";
-const ASSET_ID = POLICY_ID + "." + ASSET_NAME;
+// 3. Create POLICY_ID
+
+const POLICY_ID = cardano.transactionPolicyid(mintScript)
+
+// 4. Define ASSET_NAME
+
+const ASSET_NAME = "BerrySpaceGreen"
+
+// Convert Asset ASCII name to HEX
+
+const ASSET_NAME_HEX = ASSET_NAME.split("").map(c => c.charCodeAt(0).toString(16).padStart(2, "0")).join("");
+
+
+// 5. Create ASSET_ID
+
+const ASSET_ID = POLICY_ID + "." + ASSET_NAME_HEX
+
+// 6. Define metadata
 
 const metadata = {
-  721: {
-    [POLICY_ID]: {
-      [ASSET_NAME]: {
-        name: "token name",
-        image: "ipfs://QmQqzMTavQgT4f4T5v6PWBp7XNKtoPmC9jvn12WPT3gkSE",
-        description: "Super Fancy Berry Space Green NFT",
-        type: "image/png",
-        src: "ipfs://Qmaou5UzxPmPKVVTM9GzXPrDufP55EDZCtQmpy3T64ab9N",
-        authors: ["PIADA", "SBLYR"],
-      },
-    },
-  },
-};
+    721: {
+        [POLICY_ID]: {
+            [ASSET_NAME]: {
+                name: ASSET_NAME,
+                image: "ipfs://QmQqzMTavQgT4f4T5v6PWBp7XNKtoPmC9jvn12WPT3gkSE",
+                description: "Super Fancy Berry Space Green NFT",
+                type: "image/png",
+                src: "ipfs://Qmaou5UzxPmPKVVTM9GzXPrDufP55EDZCtQmpy3T64ab9N",
+                // other properties of your choice
+                authors: ["PIADA", "SBLYR"]
+            }
+        }
+    }
+}
+
+// 7. Define transaction
 
 const tx = {
-  txIn: wallet.balance().utxo,
-  txOut: [
-    {
-      address: wallet.paymentAddr,
-      amount: { ...wallet.balance().amount, [ASSET_ID]: 1 },
-    },
-  ],
-  mint: [{ action: "mint", amount: 1, token: ASSET_ID }],
-  metadata,
-  witnessCount: 2,
-};
+    txIn: wallet.balance().utxo,
+    txOut: [
+        {
+            address: wallet.paymentAddr,
+            value: { ...wallet.balance().value, [ASSET_ID]: 1 }
+        }
+    ],
+    mint: [
+        { action: "mint", quantity: 1, asset: ASSET_ID, script: mintScript },
+      ],
+    metadata,
+    witnessCount: 2
+}
 
-const raw = buildTransaction(tx);
-const signed = signTransaction(wallet, raw, mintScript);
-const txHash = cardano.transactionSubmit(signed);
-console.log(txHash);
+
+
+if(Object.keys(tx.txOut[0].value).includes("undefined")|| Object.keys(tx.txIn[0].value.includes("undefinded"))){
+    delete tx.txOut[0].value.undefined
+    delete tx.txIn[0].value.undefined
+}
+
+// 8. Build transaction
+
+const buildTransaction = (tx) => {
+
+    const raw = cardano.transactionBuildRaw(tx)
+    const fee = cardano.transactionCalculateMinFee({
+        ...tx,
+        txBody: raw
+    })
+
+    tx.txOut[0].value.lovelace -= fee
+
+    return cardano.transactionBuildRaw({ ...tx, fee })
+}
+
+console.log(tx)
+const raw = buildTransaction(tx)
+
+// 9. Sign transaction
+
+const signTransaction = (wallet, tx) => {
+
+    return cardano.transactionSign({
+        signingKeys: [wallet.payment.skey, wallet.payment.skey ],
+        txBody: tx
+    })
+}
+
+const signed = signTransaction(wallet, raw)
+
+// 10. Submit transaction
+
+const txHash = cardano.transactionSubmit(signed)
+
+console.log(txHash)
 ```
 
 16. Run the minting script, then wait a few moments to check the balance (utxo)
