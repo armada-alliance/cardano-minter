@@ -17,7 +17,7 @@ const POLICY_ID = cardano.transactionPolicyid(mintScript)
 
 // 4. Define ASSET_NAME
 
-const ASSET_NAME = "BerrySpaceGreen"
+const ASSET_NAME = "TimeWarpBerry"
 
 // Convert Asset ASCII name to HEX
 
@@ -35,10 +35,10 @@ const metadata = {
         [POLICY_ID]: {
             [ASSET_NAME]: {
                 name: ASSET_NAME,
-                image: "ipfs://QmQqzMTavQgT4f4T5v6PWBp7XNKtoPmC9jvn12WPT3gkSE",
-                description: "Super Fancy Berry Space Green NFT",
+                image: "ipfs://QmUxRuzTi3UZS33rfqXzbD4Heut7zwtGUhuD7qSv7Qt584",
+                description: "Time Warp Berry NFT",
                 type: "image/png",
-                src: "ipfs://Qmaou5UzxPmPKVVTM9GzXPrDufP55EDZCtQmpy3T64ab9N",
+                src: "ipfs://QmUxRuzTi3UZS33rfqXzbD4Heut7zwtGUhuD7qSv7Qt584",
                 // other properties of your choice
                 authors: ["PIADA", "SBLYR"]
             }
