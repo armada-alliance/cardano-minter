@@ -11,7 +11,7 @@ console.log(
     cardano.toAda(sender.balance().value.lovelace) + " ADA"
 )
 
-const receiver = "addr1qym6pxg9q4ussr96c9e6xjdf2ajjdmwyjknwculadjya488pqap23lgmrz38glvuz8qlzdxyarygwgu3knznwhnrq92q0t2dv0"
+const receiver = "addr_test1qqqydvg5wzd6twvernsjcdjd9akmygyqp7gky7zpm0hrmq3ccwlnumzzuum6k6ja2k47g5dv2p4kwt753mpjjzx8fsmsq2aj0p"
 
 const txInfo = {
     txIn: cardano.queryUtxo(sender.paymentAddr),
@@ -26,7 +26,7 @@ const txInfo = {
             address: receiver,
             value: {
                 lovelace: cardano.toLovelace(1.5),
-                "ad9c09fa0a62ee42fb9555ef7d7d58e782fa74687a23b62caf3a8025.BerrySpaceGreen": 1
+                "9e57c3a4aa769063ab4963e3e2fc18aeafb6808b3adbc3f1670a9c00.54696d65576172704265727279": 1
             }
         }
     ]
