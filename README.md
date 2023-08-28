@@ -1,3 +1,5 @@
+# This is an old and deprecated tutorial. Now will be archived just for people to use the old tutorial for their own education
+
 # How to create a NFT on the Cardano blockchain using JavaScript
 
 Youtube Video: https://www.youtube.com/watch?v=OeOliguGn7Y
